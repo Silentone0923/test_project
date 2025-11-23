@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>萬能點餐模擬機 - 實作練習中</title>
+    <!-- 載入 Tailwind CSS 確保響應式設計和高對比 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* 基礎全頁面設定：針對 GitHub Pages 獨立運行的環境 */
+        html, body {
+            margin: 0;
+            padding: 0;
+            /* 關鍵修正：確保 body 至少佔滿整個螢幕視埠高度 */
+            min-height: 100vh;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* 使用 Inter 字體並設置基本高對比背景 */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a; /* 深色背景 */
+            color: #e5e7eb; /* 淺色文字 */
+            /* 修正：移除 Flexbox 居中，讓內容自然從上往下堆疊 */
+            display: block; 
+        }
+        
+        /* 確保內容區塊清晰可辨 */
+        .card {
+            background-color: #2d3748; /* 比背景稍淺的卡片色 */
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+        }
+        /* 專為優世代設計的特大按鈕 */
+        .action-button {
+            padding: 1.5rem 3rem;
+            font-size: 1.5rem; /* 大字體 */
+            font-weight: bold;
+            transition: transform 0.1s ease;
+            border-radius: 0.75rem; /* 保持按鈕圓角 */
+        }
+        .action-button:active {
+            transform: scale(0.98);
+        }
+        /* 彈出視窗的疊層樣式 */
+        .modal-overlay {
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); 
+            z-index: 40;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            max-height: 90vh;
+            overflow-y: auto;
+            background-color: #2d3748;
+            border: 4px solid #fcd34d; 
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+        .option-label {
+            display: block;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            background-color: #4b5563;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .option-label:hover {
+            background-color: #6b7280;
+        }
+        /* 選中選項的高對比樣式 */
+        input[type="radio"]:checked + .option-label {
+            background-color: #059669; 
+            color: #fff;
+            border: 2px solid #a7f3d0;
+        }
+        /* 圖示樣式 */
+        .item-icon {
+            width: 60px; 
+            height: 60px;
+            margin-right: 1rem;
+            flex-shrink: 0; 
+        }
+        /* 確保 Base64 圖片能適應容器 */
+        .item-icon img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 主要模擬點餐介面 -->
+    <div id="ordering-app" class="card w-full max-w-lg mx-auto p-6 md:p-10 rounded-xl space-y-8">
+
+        <!-- 標題與說明 -->
+        <header class="text-center space-y-2">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-indigo-400">專一點餐模擬 (進階含圖示)</h1>
+            <p class="text-xl md:text-2xl font-light text-yellow-300">
+                【附錄實作練習】此為模擬頁面，請放心操作，<span class="text-red-400 font-extrabold">絕不會付費</span>。
+            </p>
+            <p class="text-lg text-gray-400">請點選品項後，<span class="text-yellow-400 font-bold">記得在彈出視窗中選擇選項</span>，再結帳。</p>
+        </header>
+
+        <!-- 模擬菜單項目 -->
+        <div id="menu-items" class="space-y-4">
+
+            <!-- 項目 1: 專一烤箱烤土司 (SVG 圖示) -->
+            <div class="flex items-center bg-gray-700 p-4 rounded-lg shadow-md">
+                <!-- 圖示 -->
+                <div class="item-icon flex items-center justify-center bg-gray-600 rounded-full">
+                    <!-- 烤箱 SVG 圖示 -->
+                    <svg class="w-10 h-10 text-yellow-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                        <line x1="22" y1="12" x2="22" y2="14"></line>
+                        <line x1="2" y1="12" x2="2" y2="14"></line>
+                        <rect x="5" y="7" width="14" height="6" rx="1" ry="1"></rect>
+                        <line x1="10" y1="17" x2="14" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="flex-grow space-y-1">
+                    <!-- 修正：名稱已更新 -->
+                    <p class="text-2xl font-bold">專一烤箱烤土司 (<span class="text-yellow-400">50 元起</span>) (<span class="text-red-400 font-extrabold">需選配</span>)</p>
+                    <p class="text-gray-400">練習在點選後，做出額外選擇。</p>
+                </div>
+                <button onclick="selectOptions('toast')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg text-xl transition duration-150 ml-4">
+                    點選
+                </button>
+            </div>
+
+            <!-- 項目 2: 專一電鍋煮白米 (SVG 圖示) -->
+            <div class="flex items-center bg-gray-700 p-4 rounded-lg shadow-md">
+                <!-- 圖示 -->
+                <div class="item-icon flex items-center justify-center bg-gray-600 rounded-full">
+                    <svg class="w-10 h-10 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <div class="flex-grow space-y-1">
+                    <!-- 修正：名稱已更新 -->
+                    <p class="text-2xl font-bold">專一電鍋煮白米 (<span class="text-yellow-400">80 元起</span>) (<span class="text-red-400 font-extrabold">需選配</span>)</p>
+                    <p class="text-gray-400">練習在點選後，做出額外選擇。</p>
+                </div>
+                <button onclick="selectOptions('rice')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg text-xl transition duration-150 ml-4">
+                    點選
+                </button>
+            </div>
+
+            <!-- 項目 3: 專一輕盈廚具湯品 (SVG 圖示：深鍋，無火焰) -->
+            <div class="flex items-center bg-gray-700 p-4 rounded-lg shadow-md">
+                <!-- 圖示 -->
+                <div class="item-icon flex items-center justify-center bg-gray-600 rounded-full">
+                    <!-- 湯鍋 SVG 圖示 (無火焰) -->
+                    <svg class="w-10 h-10 text-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <!-- 鍋身: 深 U 型，無波紋 -->
+                        <path d="M4 6h16v8a8 8 0 0 1-8 8 8 8 0 0 1-8-8V6z"></path>
+                        <!-- 左把手 -->
+                        <path d="M2 8h2"></path>
+                        <!-- 右把手 -->
+                        <path d="M20 8h2"></path>
+                        <!-- 鍋蓋線 (新增一條線讓頂部更完整) -->
+                        <line x1="4" y1="6" x2="20" y2="6"></line>
+                    </svg>
+                </div>
+                <div class="flex-grow space-y-1">
+                    <!-- 修正：名稱已更新 -->
+                    <p class="text-2xl font-bold">專一輕盈廚具湯品 (簡易) (<span class="text-yellow-400">120 元</span>)</p>
+                    <p class="text-gray-400">簡易模式：點選即加入購物車。</p>
+                </div>
+                <button onclick="addItem('專一輕盈廚具湯品', 120)" class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg text-xl transition duration-150 ml-4">
+                    點選
+                </button>
+            </div>
+        </div>
+
+        <!-- 購物車清單 (大型顯示) -->
+        <div class="bg-yellow-800/50 p-4 rounded-lg">
+            <h2 class="text-2xl font-bold text-yellow-300 mb-3">您的點餐清單</h2>
+            <ul id="cart-list" class="space-y-2 text-xl text-white">
+                <li id="empty-cart-message" class="text-gray-400 italic">尚未點選任何品項。</li>
+            </ul>
+            <div class="text-right text-3xl font-extrabold mt-4 pt-3 border-t border-yellow-700">
+                總金額 (模擬): <span id="total-price" class="text-red-400">0</span> 元
+            </div>
+        </div>
+
+        <!-- 主要結帳按鈕 -->
+        <div class="text-center pt-4">
+            <button onclick="checkoutSimulation()" class="action-button w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg">
+                ✅ 結帳 (<span class="text-yellow-300">模擬操作</span>)
+            </button>
+        </div>
+    </div>
+
+    <!-- 模擬結帳成功訊息 (初始隱藏) -->
+    <div id="success-message" class="card w-full max-w-lg mx-auto p-10 rounded-xl space-y-6 text-center hidden">
+        <h2 class="text-5xl font-extrabold text-green-400">
+            恭喜您！✅
+        </h2>
+        <p class="text-3xl text-white">
+            您已成功完成網路點餐操作！
+        </p>
+        <p class="text-xl text-gray-300 font-light">
+            <span class="text-red-400 font-bold">此為模擬頁面，無需實際付款。</span><br>
+            您已掌握掃碼與點選技能，請充滿自信地面對下次挑戰！
+        </p>
+        <button onclick="resetApp()" class="action-button bg-gray-500 hover:bg-gray-600 text-white rounded-xl">
+            重新練習
+        </button>
+    </div>
+
+    <!-- 步驟二：選項彈出視窗 (Modal) -->
+    <div id="options-modal" class="modal-overlay hidden">
+        <div class="modal-content w-full max-w-md mx-4 rounded-xl p-6 md:p-8 space-y-4">
+            <h2 id="modal-title" class="text-3xl font-extrabold text-white">請選擇烤箱吐司選項</h2>
+            <p id="modal-description" class="text-lg text-gray-300">這是<span class="text-red-400 font-extrabold">必選</span>步驟，請點選其中一個選項。</p>
+            
+            <form id="options-form" class="space-y-3">
+                <!-- 選項會透過 JavaScript 插入此處 -->
+            </form>
+
+            <div class="flex justify-between space-x-4 pt-4">
+                <button onclick="closeModal()" class="w-full action-button bg-red-600 hover:bg-red-700 text-white rounded-xl text-lg p-3">
+                    取消 (不點此項)
+                </button>
+                <button onclick="confirmItem()" class="w-full action-button bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-lg p-3">
+                    確定加入購物車
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        let cart = []; // 購物車原始清單
+        let currentItem = null; // 用來暫存當前正在選擇選項的項目
+        
+        const cartList = document.getElementById('cart-list');
+        const totalPriceDisplay = document.getElementById('total-price');
+        const emptyCartMessage = document.getElementById('empty-cart-message');
+        const orderingApp = document.getElementById('ordering-app');
+        const successMessage = document.getElementById('success-message');
+        const optionsModal = document.getElementById('options-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const optionsForm = document.getElementById('options-form');
+
+        // 定義菜單和選項數據 (這模擬了從伺服器取得數據)
+        const MENU_DATA = {
+            toast: {
+                name: '專一烤箱烤土司', // <-- 名稱已更新
+                basePrice: 50,
+                options: [
+                    { label: '烤焦度：正常 (無須操作)', price: 0, key: 'normal' },
+                    { label: '烤焦度：微焦 (像傳統烤箱)', price: 5, key: 'crispy' },
+                    { label: '加購：專一無糖輕盈奶油', price: 10, key: 'butter' } // <-- 選項名稱已更新
+                ]
+            },
+            rice: {
+                name: '專一電鍋煮白米', // <-- 名稱已更新
+                basePrice: 80,
+                options: [
+                    { label: '份量：標準一碗', price: 0, key: 'standard' },
+                    { label: '份量：小碗 (減$10)', price: -10, key: 'small' },
+                    { label: '份量：大碗 (加$20)', price: 20, key: 'large' }
+                ]
+            }
+        };
+
+
+        /**
+         * 步驟一：點擊菜單項目，顯示選項彈出視窗
+         */
+        function selectOptions(itemKey) {
+            currentItem = MENU_DATA[itemKey];
+            
+            modalTitle.textContent = `請選擇 ${currentItem.name} 的選項`;
+            optionsForm.innerHTML = '';
+            
+            // 根據數據生成選項按鈕
+            currentItem.options.forEach((option, index) => {
+                const priceText = option.price > 0 ? ` (+${option.price} 元)` : (option.price < 0 ? ` (${option.price} 元)` : '');
+                const optionId = `${itemKey}-option-${index}`;
+
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.id = optionId;
+                input.name = 'modifier';
+                input.value = index;
+                input.className = 'hidden'; // 隱藏原生 radio 按鈕
+
+                const label = document.createElement('label');
+                label.htmlFor = optionId;
+                label.className = 'option-label';
+                label.textContent = `${option.label}${priceText}`;
+                
+                optionsForm.appendChild(input);
+                optionsForm.appendChild(label);
+            });
+
+            // 顯示彈出視窗
+            optionsModal.classList.remove('hidden');
+            orderingApp.classList.add('pointer-events-none', 'opacity-50'); // 讓主介面變暗且無法點擊
+        }
+
+        /**
+         * 步驟二：確定選擇選項，將最終項目加入購物車
+         */
+        function confirmItem() {
+            const selectedOption = optionsForm.querySelector('input[name="modifier"]:checked');
+
+            if (!selectedOption) {
+                showTemporaryMessage('請務必選擇一個選項才能加入購物車！', 'bg-orange-500');
+                return;
+            }
+
+            const optionIndex = parseInt(selectedOption.value);
+            const selectedModifier = currentItem.options[optionIndex];
+
+            // 計算最終價格
+            const finalPrice = currentItem.basePrice + selectedModifier.price;
+            
+            // 組合最終名稱
+            const finalName = `${currentItem.name} (${selectedModifier.label.replace(/ \(.+\)$/, '')})`;
+
+            // 加入購物車
+            cart.push({ name: finalName, price: finalPrice }); 
+            updateCartDisplay();
+            
+            // 關閉視窗
+            closeModal();
+            currentItem = null;
+        }
+
+        /**
+         * 簡易模式：直接加入購物車 (例如湯品)
+         */
+        function addItem(name, price) {
+            // 修正：這裡的 name 參數應為新的名稱
+            cart.push({ name: '專一輕盈廚具湯品', price }); 
+            updateCartDisplay();
+        }
+
+        /**
+         * 關閉選項彈出視窗
+         */
+        function closeModal() {
+            optionsModal.classList.add('hidden');
+            orderingApp.classList.remove('pointer-events-none', 'opacity-50');
+            currentItem = null;
+        }
+
+        /**
+         * *** 更新購物車清單和總金額顯示，並進行分組和數量計算 (包含符號修正) ***
+         */
+        function updateCartDisplay() {
+            let total = 0;
+            const groupedCart = {};
+
+            // 1. 彙總原始清單 (cart) 中的相同品項
+            cart.forEach(item => {
+                // 使用名稱和價格作為唯一鍵
+                const key = `${item.name}|${item.price}`;
+                
+                if (!groupedCart[key]) {
+                    groupedCart[key] = {
+                        name: item.name,
+                        price: item.price,
+                        quantity: 0
+                    };
+                }
+                groupedCart[key].quantity++;
+                total += item.price; // 累計總金額
+            });
+
+            cartList.innerHTML = '';
+
+            // 2. 根據彙總後的清單渲染 HTML 
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove('hidden');
+            } else {
+                emptyCartMessage.classList.add('hidden');
+                
+                Object.values(groupedCart).forEach(groupedItem => {
+                    const li = document.createElement('li');
+                    li.className = 'flex justify-between items-center';
+                    
+                    const subTotal = groupedItem.price * groupedItem.quantity;
+
+                    li.innerHTML = `
+                        <span>${groupedItem.name} 
+                            <span class="text-indigo-300 font-extrabold">x${groupedItem.quantity}</span>
+                        </span>
+                        <div class="flex items-center space-x-2">
+                            <span>${subTotal} 元</span>
+                            <!-- 修正：將按鈕文字從 -1 替換為 ➖ 符號 -->
+                            <button onclick="removeOneUnit('${groupedItem.name}', ${groupedItem.price})" class="text-red-400 hover:text-red-300 font-bold text-lg leading-none transition duration-150">
+                                ➖ 
+                            </button>
+                        </div>
+                    `;
+                    cartList.appendChild(li);
+                });
+            }
+
+            // 3. 更新總金額
+            totalPriceDisplay.textContent = total;
+        }
+
+        /**
+         * *** 從購物車中移除單一個體 (單一數量) ***
+         */
+        function removeOneUnit(nameToRemove, priceToRemove) {
+            // 在原始 cart 陣列中，尋找第一個符合名稱和價格的品項
+            const indexToRemove = cart.findIndex(item => item.name === nameToRemove && item.price === priceToRemove);
+
+            if (indexToRemove !== -1) {
+                cart.splice(indexToRemove, 1); // 移除找到的第一個品項
+                updateCartDisplay(); // 重新渲染購物車
+            }
+        }
+        
+        /**
+         * 模擬結帳流程 (邏輯不變)
+         */
+        function checkoutSimulation() {
+            if (cart.length === 0) {
+                showTemporaryMessage('請先點選至少一個品項才能結帳喔！', 'bg-red-500');
+                return;
+            }
+
+            orderingApp.classList.add('hidden');
+            successMessage.classList.remove('hidden');
+            window.scrollTo(0, 0); 
+        }
+
+        /**
+         * 重新開始練習 (邏輯不變)
+         */
+        function resetApp() {
+            cart = [];
+            updateCartDisplay();
+            successMessage.classList.add('hidden');
+            orderingApp.classList.remove('hidden');
+        }
+
+        /**
+         * 顯示短暫提示訊息 (取代 alert) (邏輯不變)
+         */
+        function showTemporaryMessage(message, bgColorClass) {
+            const tempDiv = document.createElement('div');
+            tempDiv.className = `fixed top-0 left-0 right-0 p-4 text-center text-2xl font-bold ${bgColorClass} text-white transition-all duration-300 ease-in-out z-50`;
+            tempDiv.textContent = message;
+            document.body.appendChild(tempDiv);
+
+            setTimeout(() => {
+                tempDiv.style.opacity = 0;
+                setTimeout(() => tempDiv.remove(), 500);
+            }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', updateCartDisplay);
+    </script>
+</body>
+</html>
