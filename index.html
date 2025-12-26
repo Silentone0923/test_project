@@ -49,15 +49,13 @@
             font-family: 'JetBrains Mono', monospace;
         }
         
-        /* 背景點陣紋理 - 加深顏色與尺寸以確保可見 */
+        /* 背景點陣紋理 */
         .bg-dots {
             background-color: transparent;
-            /* 淺色模式：使用較深的灰色 (#9ca3af) 且半徑加大至 1.5px */
             background-image: radial-gradient(#9ca3af 1.5px, transparent 1.5px);
             background-size: 24px 24px;
         }
         .dark .bg-dots {
-            /* 深色模式：使用中灰色 (#4b5563) 確保在深黑背景上可見 */
             background-image: radial-gradient(#4b5563 1.5px, transparent 1.5px);
         }
 
@@ -132,15 +130,11 @@
         }
     </style>
 </head>
-<!-- 移除 body 的背景色，改由 fixed 背景層控制，避免圖層遮擋 -->
 <body class="leading-relaxed text-notion-textLight dark:text-notion-textDark transition-colors duration-300 relative min-h-screen selection:bg-blue-200 dark:selection:bg-blue-900 bg-notion-light dark:bg-notion-dark">
 
-    <!-- 背景設計層 (修正 Z-Index 為 0，確保在 body 背景之上但在內容之下) -->
+    <!-- 背景設計層 -->
     <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <!-- 點陣紋理 (調整透明度) -->
         <div class="absolute inset-0 bg-dots opacity-40 dark:opacity-30"></div>
-        
-        <!-- 氛圍光暈 -->
         <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-300/30 dark:bg-blue-600/20 rounded-full blur-3xl animate-blob mix-blend-multiply dark:mix-blend-screen"></div>
         <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-purple-300/30 dark:bg-purple-600/20 rounded-full blur-3xl animate-blob animation-delay-2000 mix-blend-multiply dark:mix-blend-screen"></div>
         <div class="hidden md:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-300/20 dark:bg-indigo-600/10 rounded-full blur-3xl animate-blob animation-delay-4000 mix-blend-multiply dark:mix-blend-screen"></div>
@@ -188,10 +182,10 @@
         </div>
     </nav>
 
-    <!-- 主要內容容器 (設定 z-10 確保在背景之上) -->
+    <!-- 主要內容容器 -->
     <main class="max-w-4xl mx-auto px-6 py-12 relative z-10">
 
-        <!-- 標題區 (Header) -->
+        <!-- 標題區 -->
         <header class="mb-16 rounded-3xl p-8 md:p-12 bg-white/60 dark:bg-gray-800/40 backdrop-blur-sm border border-white/50 dark:border-gray-700/50 shadow-sm animate-fade-in-up">
             <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
                 <div class="inline-flex items-center justify-center p-4 rounded-2xl bg-white dark:bg-gray-700 shadow-md">
@@ -213,7 +207,7 @@
             </div>
         </header>
 
-        <!-- 序言區 (Intro) -->
+        <!-- 序言區 -->
         <section id="intro" class="mb-24 scroll-mt-28">
             <div class="flex items-center gap-3 mb-8">
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">序</h2>
@@ -221,43 +215,38 @@
             </div>
 
             <div class="space-y-4">
-                <!-- Callout 1 -->
                 <div class="callout border-l-gray-400 dark:border-l-gray-600">
                     <div class="text-xl mr-3">👉🏻</div>
                     <div class="font-medium">
                         「社會組沒錢賺！選二類或三類『向錢看齊』不好嗎？」<br>
-這句話不知在心裡出現多少次了，每次都趁我躺在床上準備睡覺、心裡沒什麼衛兵看守時，攻擊心房試圖逃脫關押它的陰暗，心隱隱作痛，我無可奈何，翻身喚醒衛兵，然後沉沉睡去。
+                        這句話不知在心裡出現多少次了，每次都趁我躺在床上準備睡覺、心裡沒什麼衛兵看守時，攻擊心房試圖逃脫關押它的陰暗，心隱隱作痛，我無可奈何，翻身喚醒衛兵，然後沉沉睡去。
                     </div>
                 </div>
 
-                <!-- Callout 2 -->
                 <div class="callout border-l-orange-400 dark:border-l-orange-600">
                     <div class="text-xl mr-3">🌥️</div>
                     <div class="font-medium">
                         窗外傳來咕咕咕的叫聲，該起床刷牙洗臉吃早餐了。<br>
-一如既往七點四十到校沒幾個人；一如既往第一節課全班還沒到齊；一如既往大家只吃午餐的蛋白質；一如既往第八節不專心上課；一如既往放學回家。「啊！社會組真輕鬆！看看二三類他們，幾乎天天補習班，或是留校晚自習。競爭壓力大，這都是為了培養社會需要的人才！你們的存在只是在襯托他們的厲害罷了！」陰暗的心房裡傳來難得讓我感到新奇的言論，我為之耳目一新。
+                        一如既往七點四十到校沒幾個人；一如既往第一節課全班還沒到齊；一如既往大家只吃午餐的蛋白質；一如既往第八節不專心上課；一如既往放學回家。「啊！社會組真輕鬆！看看二三類他們，幾乎天天補習班，或是留校晚自習。競爭壓力大，這都是為了培養社會需要的人才！你們的存在只是在襯托他們的厲害罷了！」陰暗的心房裡傳來難得讓我感到新奇的言論，我為之耳目一新。
                     </div>
                 </div>
 
-                <!-- Callout 3 -->
                 <div class="callout border-l-green-500 dark:border-l-green-700">
                     <div class="text-xl mr-3">🚪</div>
                     <div class="font-medium">
                         回家，邊跟父母大聊學校發生的事情，邊咀嚼碗中的澱粉蛋白質纖維素。吃完晚飯，洗完餐具，關上房門，戴上耳機，正是絕佳休息時間！<br>
-晚上八點，準時開始寫作業做報告，奮鬥一小時成功完成，雖然那個微分不看課本根本不知道怎麼解題，雖然其他成員還沒做好自己負責的歷史報告部分。我不管，打開Python，繼續編寫還沒完成的程式碼，劈哩啪啦打了一大堆，執行！什麼？有錯誤無法運行？我只好砍掉重來，一行一行地偵錯。
+                        晚上八點，準時開始寫作業做報告，奮鬥一小時成功完成，雖然那個微分不看課本根本不知道怎麼解題，雖然其他成員還沒做好自己負責的歷史報告部分。我不管，打開Python，繼續編寫還沒完成的程式碼，劈哩啪啦打了一大堆，執行！什麼？有錯誤無法運行？我只好砍掉重來，一行一行地偵錯。
                     </div>
                 </div>
 
-                <!-- Callout 4 -->
                 <div class="callout border-l-purple-500 dark:border-l-purple-700">
                     <div class="text-xl mr-3">🛌🏻</div>
                     <div class="font-medium">
                         十點半，該洗澡刷牙睡覺了，換上乾淨的衣服，刷走今天的牙菌斑，靜靜地躺在床上，閉眼。<br>
-「這樣的生活，可真是輕鬆啊！」我暗自心想著。
+                        「這樣的生活，可真是輕鬆啊！」我暗自心想著。
                     </div>
                 </div>
 
-                <!-- Summary -->
                 <div class="callout border-l-red-500 dark:border-l-red-700 bg-red-50/50 dark:bg-red-900/10">
                     <div class="text-xl mr-3">😱</div>
                     <div>
@@ -268,7 +257,7 @@
             </div>
         </section>
 
-        <!-- 學習資源區 (Resources) -->
+        <!-- 學習資源區 -->
         <section id="resources" class="mb-24 scroll-mt-28">
             <h2 class="text-2xl font-bold mb-8 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center gap-2">
                 <i class="fa-solid fa-book-bookmark text-blue-500"></i>
@@ -279,7 +268,8 @@
                 <!-- Resource 1 -->
                 <a href="https://www.youtube.com/playlist?list=PL7enJ2-v6SPk5vrrzV_f0QJy7bDa06vI5" target="_blank" class="group block bg-white/80 dark:bg-notion-cardDark/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col h-full">
                     <div class="aspect-video w-full bg-gray-100 dark:bg-gray-800 relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Python Learning" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <!-- 使用你提供的正確 YouTube 縮圖 -->
+                        <img src="https://img.youtube.com/vi/zD7dXqE-VVA/maxresdefault.jpg" alt="Python Learning" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/0 transition-colors">
                             <i class="fa-brands fa-youtube text-5xl text-red-600 drop-shadow-lg group-hover:scale-110 transition-transform"></i>
                         </div>
@@ -287,9 +277,10 @@
                     <div class="p-5 flex flex-col flex-grow">
                         <h3 class="font-bold text-lg text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">Python 零基礎快速上手</h3>
                         <span class="inline-block bg-red-100 text-red-600 text-xs px-2 py-1 rounded w-fit mt-2 mb-3 font-semibold">Youtube Playlist</span>
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-auto leading-relaxed">
+                        <!-- 移除 mt-auto，讓文字從上方開始排列 -->
+                        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                             我超級推薦第一次接觸Python的人可以從這裡開始！<br>
-                            從最基本的變數到後續進階的陣列都講得淺顯易懂，影片最後面也都會有實作練習，跟著一起做很快就能掌握基本功。 
+                            從最基本的變數到後續進階的陣列都講得淺顯易懂，影片最後面也都會有實作練習，跟著一起做很快就能掌握基本功。
                         </p>
                     </div>
                 </a>
@@ -305,7 +296,8 @@
                     <div class="p-5 flex flex-col flex-grow">
                         <h3 class="font-bold text-lg text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">Python Full Course for free (2024)</h3>
                         <span class="inline-block bg-red-100 text-red-600 text-xs px-2 py-1 rounded w-fit mt-2 mb-3 font-semibold">Bro Code</span>
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-auto leading-relaxed">
+                        <!-- 移除 mt-auto，讓文字從上方開始排列 -->
+                        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                             說實話，我大概只有看15分鐘就不看了，不是因為聽不懂，他講得非常清楚，是因為沒時間啊！<br>
                             當時的我認為，我已經看過剛剛的python學習播放清單好幾輪了，應該不需要再用英文學習一次了。所以......我就半途而廢了。<br>
                             推薦給想用全英文學習Python的人。
@@ -313,7 +305,7 @@
                     </div>
                 </a>
 
-                <!-- Resource 3 (Steam) -->
+                <!-- Resource 3 -->
                 <a href="https://steam.oxxostudio.tw/category/python/info/start.html" target="_blank" class="group block bg-white/80 dark:bg-notion-cardDark/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 dark:border-gray-700 overflow-hidden md:col-span-2">
                     <div class="p-6 flex flex-col md:flex-row items-center gap-6">
                         <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-xl text-blue-600 dark:text-blue-300 shrink-0">
@@ -360,8 +352,8 @@
             </div>
         </section>
 
-        <!-- 作品展示區 (Projects) -->
-        <section id="projects" class="mb-24 scroll-mt-28">
+        <!-- 作品展示區 -->
+        <section id="projects" class="mb-24 scroll-mt-24">
             <h2 class="text-2xl font-bold mb-10 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center gap-2">
                 <i class="fa-solid fa-code text-green-500"></i>
                 我的 Python 作品
@@ -389,7 +381,7 @@
                     <video src="真正的第一次程式編寫.mp4" controls class="w-full aspect-video bg-black"></video>
                 </div>
                 
-                <!-- 新增：心得感想區 (更像筆記的樣式) -->
+                <!-- 新增：心得感想區 -->
                 <div class="mt-4 mb-6 relative">
                     <div class="absolute -left-2 top-4 w-1 h-full bg-blue-200 dark:bg-blue-900 rounded-full"></div>
                     <div class="p-5 bg-blue-50/50 dark:bg-blue-900/10 rounded-r-xl border border-blue-100 dark:border-blue-800/30">
@@ -414,34 +406,32 @@
                     </div>
                     <div class="p-4 overflow-x-auto custom-scrollbar">
 <pre class="code-font text-sm text-gray-300 leading-relaxed">
-<span class="text-purple-400">print</span>(<span class="text-green-400">"歡迎來到命運占卜！"</span>)
-name = <span class="text-blue-400">input</span>(<span class="text-green-400">"請輸入你的名字: "</span>)
-age = <span class="text-blue-400">int</span>(<span class="text-blue-400">input</span>(<span class="text-green-400">"請輸入你的年齡: "</span>))
+<span class="text-purple-400">import</span> random
 
-<span class="text-gray-500"import random
-name= input("請輸入你的名字：")
-print(f"{name}你好，很高興與你見面。")
-birth = input("請告訴我你的出生年：")
-age= 2025-int(birth)
-code = random.randint(0,age)
-print(f"所以你今年{age}歲，對吧？")
-print("我現在要幫你占卜，透過你的生日，我就可以知道你明天的運勢")
-option=input("你準備好了嗎？Y/N")
-if option=="N":    
-	print("好吧，你不想被我占卜，我也不會違背你的意願")    
-	print("再見了！")    
-	input("\n按下 Enter 鍵結束遊戲...")
-elif option=="Y":    
-	if code==0:       
-	print(f"{name}，很遺憾，你抽到的是大凶！！")        
-	input("\n按下 Enter 鍵結束遊戲...")    
-	elif 0<code<=10:        
-	print(f"{name}，恭喜你，抽到的是小吉！！")        
-	input("\n按下 Enter 鍵結束遊戲...")    
-	elif 10<code<=20:        
-	print(f"{name}，非常恭喜你，抽到的是大吉！！")        
-	input("\n按下 Enter 鍵結束遊戲...")</span>
-<span class="text-gray-500"># 名字 + 年齡的邏輯運算...</span>
+name = <span class="text-blue-400">input</span>(<span class="text-green-400">"請輸入你的名字："</span>)
+<span class="text-purple-400">print</span>(f<span class="text-green-400">"{name}你好，很高興與你見面。"</span>)
+birth = <span class="text-blue-400">input</span>(<span class="text-green-400">"請告訴我你的出生年："</span>)
+age = <span class="text-orange-400">2025</span> - <span class="text-blue-400">int</span>(birth)
+code = random.<span class="text-blue-400">randint</span>(<span class="text-orange-400">0</span>,age)
+
+<span class="text-purple-400">print</span>(f<span class="text-green-400">"所以你今年{age}歲，對吧？"</span>)
+<span class="text-purple-400">print</span>(<span class="text-green-400">"我現在要幫你占卜，透過你的生日，我就可以知道你明天的運勢"</span>)
+option = <span class="text-blue-400">input</span>(<span class="text-green-400">"你準備好了嗎？Y/N"</span>)
+
+<span class="text-purple-400">if</span> option == <span class="text-green-400">"N"</span>:    
+    <span class="text-purple-400">print</span>(<span class="text-green-400">"好吧，你不想被我占卜，我也不會違背你的意願"</span>)    
+    <span class="text-purple-400">print</span>(<span class="text-green-400">"再見了！"</span>)    
+    <span class="text-blue-400">input</span>(<span class="text-green-400">"\n按下 Enter 鍵結束遊戲..."</span>)
+<span class="text-purple-400">elif</span> option == <span class="text-green-400">"Y"</span>:    
+    <span class="text-purple-400">if</span> code == <span class="text-orange-400">0</span>:       
+        <span class="text-purple-400">print</span>(f<span class="text-green-400">"{name}，很遺憾，你抽到的是大凶！！"</span>)        
+        <span class="text-blue-400">input</span>(<span class="text-green-400">"\n按下 Enter 鍵結束遊戲..."</span>)    
+    <span class="text-purple-400">elif</span> <span class="text-orange-400">0</span> &lt; code &lt;= <span class="text-orange-400">10</span>:        
+        <span class="text-purple-400">print</span>(f<span class="text-green-400">"{name}，恭喜你，抽到的是小吉！！"</span>)        
+        <span class="text-blue-400">input</span>(<span class="text-green-400">"\n按下 Enter 鍵結束遊戲..."</span>)    
+    <span class="text-purple-400">elif</span> <span class="text-orange-400">10</span> &lt; code &lt;= <span class="text-orange-400">20</span>:        
+        <span class="text-purple-400">print</span>(f<span class="text-green-400">"{name}，非常恭喜你，抽到的是大吉！！"</span>)        
+        <span class="text-blue-400">input</span>(<span class="text-green-400">"\n按下 Enter 鍵結束遊戲..."</span>)
 </pre>
                     </div>
                 </div>
@@ -482,7 +472,7 @@ elif option=="Y":
                     </div>
                 </div>
 
-                <!-- 程式碼區塊 -->
+                <!-- 程式碼區塊 (Project 2 更新程式碼) -->
                 <div class="bg-[#282c34] rounded-xl overflow-hidden shadow-lg border border-gray-800">
                     <div class="bg-[#21252b] px-4 py-2.5 flex items-center justify-between border-b border-gray-700">
                         <div class="flex gap-2">
@@ -496,10 +486,49 @@ elif option=="Y":
 <pre class="code-font text-sm text-gray-300 leading-relaxed">
 <span class="text-purple-400">import</span> random
 
-target = random.<span class="text-blue-400">randint</span>(1, 100)
-<span class="text-purple-400">while</span> <span class="text-orange-400">True</span>:
-    guess = <span class="text-blue-400">int</span>(<span class="text-blue-400">input</span>(<span class="text-green-400">"猜一個數字 (1-100): "</span>))
-    <span class="text-gray-500"># 判斷邏輯...</span>
+<span class="text-purple-400">def</span> <span class="text-blue-400">play_game</span>():
+    code = random.<span class="text-blue-400">randint</span>(<span class="text-orange-400">1</span>, <span class="text-orange-400">1000</span>)
+    low = <span class="text-orange-400">1</span>
+    high = <span class="text-orange-400">1000</span>
+    time = <span class="text-orange-400">0</span>
+    <span class="text-purple-400">print</span>(<span class="text-green-400">"\n=== 歡迎來到終極密碼小遊戲！ ==="</span>)
+    <span class="text-purple-400">print</span>(<span class="text-green-400">"系統已經選好一個 1 到 1000 的數字，來挑戰吧！"</span>)
+    
+    <span class="text-purple-400">while</span> <span class="text-orange-400">True</span>:
+        <span class="text-purple-400">try</span>:
+            gus = <span class="text-blue-400">int</span>(<span class="text-blue-400">input</span>(f<span class="text-green-400">"請輸入你的數字（範圍 {low} ~ {high}）："</span>))
+        <span class="text-purple-400">except</span> ValueError:
+            <span class="text-purple-400">print</span>(<span class="text-green-400">"⚠️ 請輸入有效的整數！"</span>)
+            <span class="text-purple-400">continue</span>
+            
+        <span class="text-purple-400">if not</span> (low &lt;= gus &lt;= high):
+            <span class="text-purple-400">print</span>(f<span class="text-green-400">"⚠️ 你的數字不在範圍內！目前範圍：{low} ~ {high}"</span>)
+            <span class="text-purple-400">continue</span>
+            
+        time += <span class="text-orange-400">1</span>
+        
+        <span class="text-purple-400">if</span> gus == code:
+            <span class="text-purple-400">print</span>(f<span class="text-green-400">"🎉 你猜對了！真不愧是人類！總共猜了 {time} 次！"</span>)
+            <span class="text-purple-400">break</span>
+        <span class="text-purple-400">elif</span> gus &lt; code:
+            low = gus + <span class="text-orange-400">1</span>
+            <span class="text-purple-400">print</span>(<span class="text-green-400">"猜錯了！再來一次吧"</span>)
+            <span class="text-purple-400">print</span>(f<span class="text-green-400">"👉 範圍縮減至 {low} ~ {high}"</span>)
+        <span class="text-purple-400">else</span>:
+            high = gus - <span class="text-orange-400">1</span>
+            <span class="text-purple-400">print</span>(<span class="text-green-400">"猜錯了！再來一次吧"</span>)
+            <span class="text-purple-400">print</span>(f<span class="text-green-400">"👉 範圍縮減至 {low} ~ {high}"</span>)
+
+<span class="text-purple-400">def</span> <span class="text-blue-400">main</span>():
+    <span class="text-purple-400">while</span> <span class="text-orange-400">True</span>:
+        play_game()
+        again = <span class="text-blue-400">input</span>(<span class="text-green-400">"\n要再玩一次嗎？（y/n）："</span>).strip().lower()
+        <span class="text-purple-400">if</span> again != <span class="text-green-400">'y'</span>:
+            <span class="text-purple-400">print</span>(<span class="text-green-400">"感謝遊玩！再見 👋"</span>)
+            <span class="text-purple-400">break</span>
+
+<span class="text-purple-400">if</span> __name__ == <span class="text-green-400">"__main__"</span>:
+    main()
 </pre>
                     </div>
                 </div>
@@ -536,7 +565,7 @@ target = random.<span class="text-blue-400">randint</span>(1, 100)
                     </div>
                 </div>
 
-                <!-- 程式碼區塊 -->
+                <!-- 程式碼區塊 (Project 3 更新程式碼) -->
                 <div class="bg-[#282c34] rounded-xl overflow-hidden shadow-lg border border-gray-800">
                     <div class="bg-[#21252b] px-4 py-2.5 flex items-center justify-between border-b border-gray-700">
                         <div class="flex gap-2">
@@ -549,12 +578,158 @@ target = random.<span class="text-blue-400">randint</span>(1, 100)
                     <div class="p-4 overflow-x-auto custom-scrollbar">
 <pre class="code-font text-sm text-gray-300 leading-relaxed">
 <span class="text-purple-400">import</span> pygame
+<span class="text-purple-400">import</span> random
+<span class="text-purple-400">import</span> sys
 
+<span class="text-gray-500"># --- 我們的自定義骰子函式 ---</span>
+<span class="text-purple-400">def</span> <span class="text-blue-400">roll_dice</span>(sides=<span class="text-orange-400">36</span>):
+    <span class="text-purple-400">return</span> random.<span class="text-blue-400">randint</span>(<span class="text-orange-400">1</span>, sides)
+
+<span class="text-gray-500"># --- [新增] 安全音效播放函式 ---</span>
+<span class="text-purple-400">def</span> <span class="text-blue-400">play_sound</span>(sound):
+    <span class="text-gray-500">"""防止音效播放導致的崩潰"""</span>
+    <span class="text-purple-400">if</span> sound:
+        <span class="text-purple-400">try</span>:
+            sound.<span class="text-blue-400">play</span>()
+        <span class="text-purple-400">except</span> Exception:
+            <span class="text-purple-400">pass</span>
+
+<span class="text-gray-500"># --- 打字機特效類別 ---</span>
+<span class="text-purple-400">class</span> <span class="text-blue-400">Typewriter</span>:
+    <span class="text-purple-400">def</span> <span class="text-blue-400">__init__</span>(self, surface, x, y, font, color, text, speed_hz, sound=<span class="text-orange-400">None</span>):
+        self.surface = surface
+        self.x = x
+        self.y = y
+        self.font = font
+        self.color = color
+        self.sound = sound
+        self.speed_hz = speed_hz
+        self.lines = text.<span class="text-blue-400">split</span>(<span class="text-green-400">'\n'</span>)
+        self.line_height = font.<span class="text-blue-400">get_linesize</span>()
+        self.current_line_index = <span class="text-orange-400">0</span>
+        self.current_char_index = <span class="text-orange-400">0</span>
+        <span class="text-purple-400">if</span> speed_hz <= <span class="text-orange-400">0</span>:
+            self.base_delay_ms = <span class="text-orange-400">0</span>
+            self.is_finished = <span class="text-orange-400">True</span>
+        <span class="text-purple-400">else</span>:
+            self.base_delay_ms = <span class="text-orange-400">1000</span> / speed_hz
+            self.is_finished = <span class="text-orange-400">False</span>
+        self.last_update_time = pygame.time.<span class="text-blue-400">get_ticks</span>()
+        self.extra_delay = <span class="text-orange-400">0</span>
+
+    <span class="text-purple-400">def</span> <span class="text-blue-400">update</span>(self):
+        <span class="text-purple-400">if</span> self.is_finished: <span class="text-purple-400">return</span>
+        current_time = pygame.time.<span class="text-blue-400">get_ticks</span>()
+        <span class="text-purple-400">if</span> current_time - self.last_update_time > (self.base_delay_ms + self.extra_delay):
+            self.last_update_time = current_time
+            self.extra_delay = <span class="text-orange-400">0</span>
+            current_line = self.lines[self.current_line_index]
+            <span class="text-purple-400">if</span> self.current_char_index < <span class="text-blue-400">len</span>(current_line):
+                self.current_char_index += <span class="text-orange-400">1</span>
+                char = current_line[self.current_char_index - <span class="text-orange-400">1</span>]
+                <span class="text-purple-400">if</span> self.sound <span class="text-purple-400">and</span> char != <span class="text-green-400">' '</span>:
+                    <span class="text-purple-400">if</span> self.speed_hz <= <span class="text-orange-400">10</span> <span class="text-purple-400">or</span> (self.current_char_index % <span class="text-orange-400">2</span> == <span class="text-orange-400">0</span>):
+                        <span class="text-blue-400">play_sound</span>(self.sound)
+                <span class="text-purple-400">if</span> char <span class="text-purple-400">in</span> [<span class="text-green-400">'，'</span>, <span class="text-green-400">'、'</span>]:
+                    self.extra_delay = <span class="text-orange-400">200</span>
+                <span class="text-purple-400">elif</span> char <span class="text-purple-400">in</span> [<span class="text-green-400">'。'</span>, <span class="text-green-400">'！'</span>, <span class="text-green-400">'？'</span>, <span class="text-green-400">'!'</span>, <span class="text-green-400">'?'</span>, <span class="text-green-400">'\n'</span>]:
+                    self.extra_delay = <span class="text-orange-400">400</span>
+            <span class="text-purple-400">else</span>:
+                <span class="text-purple-400">if</span> self.current_line_index < <span class="text-blue-400">len</span>(self.lines) - <span class="text-orange-400">1</span>:
+                    self.current_line_index += <span class="text-orange-400">1</span>
+                    self.current_char_index = <span class="text-orange-400">0</span>
+                    self.extra_delay = <span class="text-orange-400">300</span>
+                <span class="text-purple-400">else</span>:
+                    self.is_finished = <span class="text-orange-400">True</span>
+
+    <span class="text-purple-400">def</span> <span class="text-blue-400">draw</span>(self):
+        <span class="text-purple-400">if</span> self.is_finished:
+            <span class="text-purple-400">for</span> i, line <span class="text-purple-400">in</span> <span class="text-blue-400">enumerate</span>(self.lines):
+                draw_y = self.y + (i * self.line_height)
+                text_surface = self.font.<span class="text-blue-400">render</span>(line, <span class="text-orange-400">True</span>, self.color)
+                self.surface.<span class="text-blue-400">blit</span>(text_surface, (self.x, draw_y))
+        <span class="text-purple-400">else</span>:
+            <span class="text-purple-400">for</span> i <span class="text-purple-400">in</span> <span class="text-blue-400">range</span>(self.current_line_index):
+                draw_y = self.y + (i * self.line_height)
+                line_surface = self.font.<span class="text-blue-400">render</span>(self.lines[i], <span class="text-orange-400">True</span>, self.color)
+                self.surface.<span class="text-blue-400">blit</span>(line_surface, (self.x, draw_y))
+            current_line_text = self.lines[self.current_line_index]
+            visible_portion = current_line_text[:self.current_char_index]
+            draw_y = self.y + (self.current_line_index * self.line_height)
+            text_surface = self.font.<span class="text-blue-400">render</span>(visible_portion, <span class="text-orange-400">True</span>, self.color)
+            self.surface.<span class="text-blue-400">blit</span>(text_surface, (self.x, draw_y))
+
+    <span class="text-purple-400">def</span> <span class="text-blue-400">skip</span>(self):
+        self.is_finished = <span class="text-orange-400">True</span>
+
+<span class="text-gray-500"># --- Pygame 初始化 ---</span>
 pygame.<span class="text-blue-400">init</span>()
-screen = pygame.display.<span class="text-blue-400">set_mode</span>((800, 600))
-<span class="text-purple-400">print</span>(<span class="text-green-400">"冒險開始..."</span>)
+pygame.mixer.<span class="text-blue-400">init</span>()
+pygame.display.<span class="text-blue-400">set_caption</span>(<span class="text-green-400">"36面骰勇者"</span>)
 
-<span class="text-gray-500"># 這裡放置你的 Pygame 程式碼</span>
+<span class="text-gray-500"># --- [新增] 設定視窗圖示 (Icon) ---</span>
+<span class="text-purple-400">try</span>:
+    <span class="text-gray-500"># 優先嘗試載入名為 icon.png 的圖片</span>
+    icon_surface = pygame.image.<span class="text-blue-400">load</span>(<span class="text-green-400">"icon.png"</span>)
+<span class="text-purple-400">except</span>:
+    <span class="text-gray-500"># 如果找不到圖片，自動繪製一個 32x32 的骰子圖示</span>
+    icon_surface = pygame.<span class="text-blue-400">Surface</span>((<span class="text-orange-400">32</span>, <span class="text-orange-400">32</span>))
+    icon_surface.<span class="text-blue-400">fill</span>(BLACK)  <span class="text-gray-500"># 底色</span>
+    pygame.draw.<span class="text-blue-400">rect</span>(icon_surface, WHITE, (<span class="text-orange-400">0</span>, <span class="text-orange-400">0</span>, <span class="text-orange-400">32</span>, <span class="text-orange-400">32</span>), <span class="text-orange-400">2</span>)  <span class="text-gray-500"># 白色邊框</span>
+    <span class="text-gray-500"># 畫骰子點數 (綠色點點)</span>
+    points = [(<span class="text-orange-400">8</span>, <span class="text-orange-400">8</span>), (<span class="text-orange-400">24</span>, <span class="text-orange-400">8</span>), (<span class="text-orange-400">8</span>, <span class="text-orange-400">16</span>), (<span class="text-orange-400">24</span>, <span class="text-orange-400">16</span>), (<span class="text-orange-400">8</span>, <span class="text-orange-400">24</span>), (<span class="text-orange-400">24</span>, <span class="text-orange-400">24</span>)]
+    <span class="text-purple-400">for</span> p <span class="text-purple-400">in</span> points:
+        pygame.draw.<span class="text-blue-400">circle</span>(icon_surface, GREEN, p, <span class="text-orange-400">3</span>)
+
+pygame.display.<span class="text-blue-400">set_icon</span>(icon_surface)
+
+SCREEN_WIDTH = <span class="text-orange-400">800</span>
+SCREEN_HEIGHT = <span class="text-orange-400">600</span>
+<span class="text-gray-500"># [修改] 改回視窗模式以防崩潰</span>
+screen = pygame.display.<span class="text-blue-400">set_mode</span>((SCREEN_WIDTH, SCREEN_HEIGHT))
+clock = pygame.time.<span class="text-blue-400">Clock</span>()
+FPS = <span class="text-orange-400">60</span>
+
+pygame.key.<span class="text-blue-400">start_text_input</span>()
+
+<span class="text-gray-500"># --- 顏色 ---</span>
+BLACK = (<span class="text-orange-400">0</span>, <span class="text-orange-400">0</span>, <span class="text-orange-400">0</span>)
+WHITE = (<span class="text-orange-400">255</span>, <span class="text-orange-400">255</span>, <span class="text-orange-400">255</span>)
+GREEN = (<span class="text-orange-400">0</span>, <span class="text-orange-400">255</span>, <span class="text-orange-400">0</span>)
+RED = (<span class="text-orange-400">255</span>, <span class="text-orange-400">0</span>, <span class="text-orange-400">0</span>)
+YELLOW = (<span class="text-orange-400">255</span>, <span class="text-orange-400">255</span>, <span class="text-orange-400">0</span>)
+CYAN = (<span class="text-orange-400">0</span>, <span class="text-orange-400">255</span>, <span class="text-orange-400">255</span>)
+ORANGE = (<span class="text-orange-400">255</span>, <span class="text-orange-400">165</span>, <span class="text-orange-400">0</span>)
+GRAY = (<span class="text-orange-400">150</span>, <span class="text-orange-400">150</span>, <span class="text-orange-400">150</span>)
+DARK_GRAY = (<span class="text-orange-400">50</span>, <span class="text-orange-400">50</span>, <span class="text-orange-400">50</span>)
+GOLD = (<span class="text-orange-400">255</span>, <span class="text-orange-400">215</span>, <span class="text-orange-400">0</span>)
+
+<span class="text-gray-500"># (以下略過字型與音效設定部分，完整代碼已包含...)</span>
+<span class="text-gray-500"># 為了節省空間，這裡顯示核心邏輯部分</span>
+
+<span class="text-purple-400">def</span> <span class="text-blue-400">draw_stats_hud</span>(surface):
+    x_pos = SCREEN_WIDTH - <span class="text-orange-400">300</span>
+    name_display = f<span class="text-green-400">"{name} | {player_gender}性"</span>
+    <span class="text-purple-400">if</span> god_mode: name_display += <span class="text-green-400">" (神)"</span>
+
+    <span class="text-blue-400">draw_text</span>(surface, name_display, font_s, x_pos, <span class="text-orange-400">10</span>, CYAN)
+    <span class="text-blue-400">draw_text</span>(surface, f<span class="text-green-400">"HP: {Player_Current_Hp} / {Hp}"</span>, font_s, x_pos, <span class="text-orange-400">40</span>, GREEN)
+    <span class="text-blue-400">draw_text</span>(surface, f<span class="text-green-400">"力: {Str} | 敏: {Spd} | 智: {Int}"</span>, font_s, x_pos, <span class="text-orange-400">70</span>, WHITE)
+
+    <span class="text-gray-500"># 顯示保底狀態</span>
+    guarantee_text = <span class="text-green-400">"奇蹟: 可用"</span> <span class="text-purple-400">if</span> has_guarantee <span class="text-purple-400">else</span> <span class="text-green-400">"奇蹟: 已耗盡"</span>
+    guarantee_color = GOLD <span class="text-purple-400">if</span> has_guarantee <span class="text-purple-400">else</span> GRAY
+    <span class="text-blue-400">draw_text</span>(surface, guarantee_text, font_s, <span class="text-orange-400">20</span>, <span class="text-orange-400">10</span>, guarantee_color)
+
+<span class="text-purple-400">if</span> __name__ == <span class="text-green-400">"__main__"</span>:
+    <span class="text-gray-500"># 遊戲主迴圈邏輯...</span>
+    <span class="text-purple-400">while</span> running:
+        <span class="text-gray-500"># ... (完整代碼在上面)</span>
+        pygame.display.<span class="text-blue-400">flip</span>()
+        clock.<span class="text-blue-400">tick</span>(FPS)
+
+    pygame.<span class="text-blue-400">quit</span>()
+    sys.<span class="text-blue-400">exit</span>()
 </pre>
                     </div>
                 </div>
