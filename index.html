@@ -128,6 +128,43 @@
             z-index: 100;
             transition: width 0.1s;
         }
+
+        /* 日曆樣式 */
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+        .calendar-day:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        .calendar-day.active {
+            border: 2px solid #3b82f6;
+        }
+        .calendar-day.studied {
+            background-color: #10b981;
+            color: white;
+        }
+        .calendar-day.studied:hover {
+            background-color: #059669;
+        }
+        .calendar-day.has-note::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: #ef4444;
+        }
+        .calendar-day.studied.has-note::after {
+            background-color: white;
+        }
     </style>
 </head>
 <body class="leading-relaxed text-notion-textLight dark:text-notion-textDark transition-colors duration-300 relative min-h-screen selection:bg-blue-200 dark:selection:bg-blue-900 bg-notion-light dark:bg-notion-dark">
@@ -156,6 +193,7 @@
                     <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-600 dark:text-gray-300">
                         <a href="#intro" class="nav-link hover:text-black dark:hover:text-white transition">序言</a>
                         <a href="#resources" class="nav-link hover:text-black dark:hover:text-white transition">學習資源</a>
+                        <a href="#calendar-section" class="nav-link hover:text-black dark:hover:text-white transition">學習日曆</a>
                         <a href="#projects" class="nav-link hover:text-black dark:hover:text-white transition">作品展示</a>
                         <a href="#reflection" class="nav-link hover:text-black dark:hover:text-white transition">心得反思</a>
                     </div>
@@ -177,6 +215,7 @@
         <div id="mobile-menu" class="hidden md:hidden bg-white/95 dark:bg-[#202020]/95 border-b border-gray-200 dark:border-gray-700 px-4 py-4 space-y-3 shadow-lg backdrop-blur-md">
             <a href="#intro" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">序言</a>
             <a href="#resources" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">學習資源</a>
+            <a href="#calendar-section" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">學習日曆</a>
             <a href="#projects" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">作品展示</a>
             <a href="#reflection" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">心得反思</a>
         </div>
@@ -351,6 +390,67 @@
                 </div>
             </div>
         </section>
+
+        <!-- [新增] 自學日曆區塊 -->
+        <section id="calendar-section" class="mb-24 scroll-mt-28">
+            <h2 class="text-2xl font-bold mb-8 pb-2 border-b border-gray-200 dark:border-gray-700 flex items-center gap-2">
+                <i class="fa-solid fa-calendar-check text-indigo-500"></i>
+                自學歷程紀錄 (2025)
+            </h2>
+            <p class="mb-6 text-gray-600 dark:text-gray-400">點擊日期可記錄當天的心得與打卡狀態。</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="calendar-grid">
+                <!-- 日曆將由 JS 自動生成 -->
+            </div>
+
+            <!-- 編輯區塊 -->
+            <div id="calendar-editor" class="mt-6 p-6 bg-white dark:bg-notion-cardDark rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-white" id="editor-date-title">2025年 10月 1日</h3>
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" id="editor-check" class="form-checkbox h-5 w-5 text-green-600 rounded focus:ring-green-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                        <span class="ml-2 text-gray-700 dark:text-gray-300 font-medium">✅ 今日有自學</span>
+                    </label>
+                </div>
+                <textarea id="editor-note" class="w-full h-24 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none" placeholder="寫下今天的學習心得..."></textarea>
+                <div class="mt-2 text-right">
+                    <span id="save-status" class="text-sm text-green-500 opacity-0 transition-opacity duration-500">已儲存</span>
+                </div>
+            </div>
+
+            <!-- 匯出按鈕區 -->
+            <div class="text-center mt-10">
+                <button onclick="exportData()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-full font-bold shadow-lg transition-all transform hover:scale-105 flex items-center gap-2 mx-auto">
+                    <i class="fa-solid fa-file-export"></i> 
+                    📤 生成繳交用資料 (給教授看)
+                </button>
+                <p class="text-xs text-gray-500 mt-2">將你電腦裡的紀錄轉換成程式碼，讓任何人都能看到。</p>
+            </div>
+        </section>
+
+        <!-- 匯出彈窗 -->
+        <div id="export-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-2xl w-full mx-4 shadow-2xl border border-gray-200 dark:border-gray-700">
+                <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-code text-indigo-500"></i> 資料匯出成功
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4 text-sm">
+                    請複製下方的程式碼，並<strong>替換</strong>掉 index.html 檔案最下方 <code>&lt;script&gt;</code> 標籤內的第一行：<br>
+                    <code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">const PROFESSOR_DATA = {};</code>
+                </p>
+                <div class="relative">
+                    <textarea id="export-textarea" class="w-full h-48 p-4 rounded-lg bg-gray-900 text-green-400 font-mono text-xs resize-none focus:outline-none" readonly></textarea>
+                    <button onclick="copyExportCode()" class="absolute top-2 right-2 bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded text-xs transition">
+                        複製
+                    </button>
+                </div>
+                <div class="mt-6 text-right">
+                    <button onclick="document.getElementById('export-modal').classList.add('hidden')" class="text-gray-500 hover:text-gray-800 dark:hover:text-white transition font-medium">
+                        關閉視窗
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <!-- 作品展示區 -->
         <section id="projects" class="mb-24 scroll-mt-24">
@@ -536,6 +636,25 @@ option = <span class="text-blue-400">input</span>(<span class="text-green-400">"
                 </div>
             </div>
 
+            <!-- [新增] 轉捩點敘述區塊 -->
+            <div class="my-20 p-8 md:p-12 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-700 dark:to-indigo-800 rounded-2xl shadow-2xl text-center transform hover:scale-[1.02] transition-transform duration-300 relative overflow-hidden group">
+                <!-- 裝飾性背景元素 -->
+                <div class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-colors"></div>
+                
+                <div class="relative z-10">
+                    <div class="inline-flex items-center justify-center p-4 bg-white/20 backdrop-blur-md rounded-full mb-6 shadow-inner">
+                        <i class="fa-solid fa-rocket text-4xl text-white animate-bounce"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-white mb-4 tracking-wide">這可是我大力改用 AI 的轉捩點</h3>
+                    <p class="text-lg md:text-xl text-blue-100 leading-relaxed max-w-2xl mx-auto">
+                        在此之前，我還在手刻程式碼的泥沼中掙扎，為了修一個 Bug 耗費整晚。<br>
+                        但在這之後，我開始擁抱 AI 工具。這不只是工具的改變，更是思維的進化。<br>
+                        我從「如何寫出這行 Code」轉變為「如何設計這個邏輯」，讓創意不再被語法限制。
+                    </p>
+                </div>
+            </div>
+
             <!-- Project 3 -->
             <div class="mb-16 bg-white/80 dark:bg-notion-cardDark/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 dark:border-gray-700">
                 <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
@@ -562,8 +681,7 @@ option = <span class="text-blue-400">input</span>(<span class="text-green-400">"
                             <i class="fa-solid fa-pen-nib"></i> 開發心得
                         </h4>
                         <div class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed outline-none" contenteditable="true">
-                            (點擊此處輸入你的感想) 這是最具挑戰性的一個專案！結合了 Pygame，讓原本純文字的遊戲有了圖形介面。雖然 AI 幫了很多忙，但我學會了如何看懂別人的程式碼架構。
-                        </div>
+                         這是最具挑戰性的一個挑戰！也是運用AI能力最多的一次！不只要結合Python的外掛Pygame，語法需要重新學一套，還要在那高達一千行的程式碼找尋要手動修改的地方。雖然AI幫了我很多忙，但我也順勢學會了如何看懂別人的程式碼架構，邏輯真的很重要。                        </div>
                     </div>
                 </div>
 
@@ -754,7 +872,7 @@ GOLD = (<span class="text-orange-400">255</span>, <span class="text-orange-400">
                         從「社會組」到「開發者」
                     </h3>
                     <p class="text-gray-600 dark:text-gray-300 leading-relaxed pl-2 border-l-2 border-gray-100 dark:border-gray-700">
-                        前面的序文是我個人對社會的觀察，一般狀況下社會組的高中生會硬生生少掉很多跟程式設計接觸的機會，高中就想自行花時間學習程式了，沒料到C++真的很難，我連教學影片都看不下去，很快就打消念頭了。這學期做完第三個作品後，我的第一個感想就是：「相見恨晚啊！」我發覺自己真的很喜歡程式，不用擔心語法弄錯電腦會爆炸，因為電腦會先自行報錯，面對錯誤訊息時
+                        一直以來，「文組不懂電腦」的標籤似乎都貼在我們身上。但透過這次 Python 的學習之旅，我發現程式語言其實也是一種「語言」。就像我們學習諮商技巧是為了理解人的內心運作，學習程式則是為了理解電腦的思考邏輯。這段跨領域的學習不僅僅是為了彌補高中的遺憾，更是讓我學會用更具邏輯性的視角來分析問題。
                     </p>
                 </div>
 
@@ -762,10 +880,10 @@ GOLD = (<span class="text-orange-400">255</span>, <span class="text-orange-400">
                 <div class="bg-white/80 dark:bg-notion-cardDark/80 backdrop-blur-sm rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
                     <h3 class="text-xl font-bold mb-4 text-orange-600 dark:text-orange-400 flex items-center gap-3">
                         <span class="bg-orange-100 dark:bg-orange-900 p-2 rounded-lg"><i class="fa-solid fa-bug"></i></span>
-                        自學期間的修練
+                        與 Bug 共處的修煉
                     </h3>
                     <p class="text-gray-600 dark:text-gray-300 leading-relaxed pl-2 border-l-2 border-gray-100 dark:border-gray-700">
-                        我主要是邊看影片邊實際操作，很多學習的軌跡其實我沒有記錄到，有點惋惜畢竟那也是我的學習之路。印象中我都是照著做就可以一次成功，不過後續卻很容易忘記該語法的運用，我需要來回好幾次觀看影片，重點是隔太久還是有忘記的問題！
+                        在製作「終極密碼」和「TRPG」的過程中，最常面對的不是靈感枯竭，而是紅通通的錯誤訊息 (Error Message)。起初會感到挫折，但逐漸地，我將 Debug 的過程視為一種「諮商」。我需要耐心地傾聽（看Log）、找出核心問題（定位錯誤）、並嘗試不同的介入方式（修改程式碼）。每一次成功運行的瞬間，帶來的成就感是無可比擬的。
                     </p>
                 </div>
 
@@ -776,7 +894,7 @@ GOLD = (<span class="text-orange-400">255</span>, <span class="text-orange-400">
                         未來展望
                     </h3>
                     <p class="text-gray-600 dark:text-gray-300 leading-relaxed pl-2 border-l-2 border-gray-100 dark:border-gray-700">
-                        雖然目前的作品還很簡單，且後面（尤其第三個作品）的部分非常仰賴AI協助，但對我來說這都是成長的養分。後續運用AI來優化跟增進我的程式時，我也在思考那我未來還需不需要繼續學習更艱澀的程式設計？現在我給出的答案是：「要。」AI有時候會自我矛盾，越修越糟糕，最重要的是，如果不先給AI一個具體的程式碼，用再多的文字來描述自己想要的成果，AI終究無法達到，自己懂才可以下更精確的指令，也可乾脆直接幫助AI修改成自己想要的樣子，不學怎麼行？
+                        雖然目前的作品還很稚嫩，且許多部分仰賴 AI 的協助，但這些都是成長的養分。未來我希望能將心理學知識與程式結合，或許是開發一個簡單的心理測驗 App，或是利用數據分析來探討心理議題。這條 Python 之路，才正要開始。
                     </p>
                 </div>
             </div>
@@ -796,6 +914,134 @@ GOLD = (<span class="text-orange-400">255</span>, <span class="text-orange-400">
     </main>
 
     <script>
+        // --- 教授評分用資料區 (請將匯出的資料貼在這裡) ---
+        const PROFESSOR_DATA = {
+  "2025-10-21": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-10-26": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-12-10": {
+    "studied": false,
+    "note": ""
+  },
+  "2025-12-6": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-10-24": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-10-28": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-12-4": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-10-22": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-11-8": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-10-18": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-11-19": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-12-2": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-11-12": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-12-7": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-12-3": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-10-14": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-10-30": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-12-5": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-11-27": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-12-1": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-11-15": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-10-2": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-10-3": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-10-12": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-11-5": {
+    "studied": false,
+    "note": ""
+  },
+  "2025-10-16": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-10-10": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-11-26": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-11-23": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-10-1": {
+    "studied": true,
+    "note": ""
+  },
+  "2025-10-31": {
+    "studied": true,
+    "note": ""
+  }
+};
+
         // 頁面捲動效果
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -854,6 +1100,160 @@ GOLD = (<span class="text-orange-400">255</span>, <span class="text-orange-400">
                 behavior: 'smooth'
             });
         });
+
+        // --- 自學日曆邏輯 (升級版) ---
+        const months = [9, 10, 11]; // 10月, 11月, 12月 (0-indexed)
+        const year = 2025; // 修正年份為 2025
+        const calendarGrid = document.getElementById('calendar-grid');
+        const calendarEditor = document.getElementById('calendar-editor');
+        const editorDateTitle = document.getElementById('editor-date-title');
+        const editorCheck = document.getElementById('editor-check');
+        const editorNote = document.getElementById('editor-note');
+        const saveStatus = document.getElementById('save-status');
+        let currentSelectedDate = null;
+
+        // 生成日曆
+        months.forEach(monthIndex => {
+            const monthDiv = document.createElement('div');
+            monthDiv.className = 'bg-white/50 dark:bg-notion-cardDark/50 backdrop-blur-sm rounded-xl p-4 border border-gray-100 dark:border-gray-700';
+            
+            const monthTitle = document.createElement('h4');
+            monthTitle.className = 'text-center font-bold mb-3 text-gray-700 dark:text-gray-200';
+            monthTitle.textContent = `${year}年 ${monthIndex + 1}月`;
+            monthDiv.appendChild(monthTitle);
+
+            const daysGrid = document.createElement('div');
+            daysGrid.className = 'grid grid-cols-7 gap-1';
+            
+            // 星期標題
+            ['日', '一', '二', '三', '四', '五', '六'].forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'text-center text-xs text-gray-400 mb-1';
+                dayHeader.textContent = day;
+                daysGrid.appendChild(dayHeader);
+            });
+
+            const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+            const firstDay = new Date(year, monthIndex, 1).getDay();
+
+            // 空白填充
+            for (let i = 0; i < firstDay; i++) {
+                const empty = document.createElement('div');
+                daysGrid.appendChild(empty);
+            }
+
+            // 日期生成
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dayBtn = document.createElement('div');
+                dayBtn.className = 'calendar-day text-gray-700 dark:text-gray-300 relative';
+                dayBtn.textContent = d;
+                
+                const dateKey = `${year}-${monthIndex + 1}-${d}`;
+                dayBtn.dataset.date = dateKey;
+
+                // 優先讀取匯出的資料 (PROFESSOR_DATA)，如果沒有才讀取本地 (localStorage)
+                let savedData = {};
+                if (PROFESSOR_DATA[dateKey]) {
+                    savedData = PROFESSOR_DATA[dateKey];
+                } else {
+                    savedData = JSON.parse(localStorage.getItem(`study_record_${dateKey}`) || '{}');
+                }
+
+                if (savedData.studied) dayBtn.classList.add('studied');
+                if (savedData.note) dayBtn.classList.add('has-note');
+
+                dayBtn.addEventListener('click', () => selectDate(dateKey, dayBtn));
+                daysGrid.appendChild(dayBtn);
+            }
+
+            monthDiv.appendChild(daysGrid);
+            calendarGrid.appendChild(monthDiv);
+        });
+
+        // 選取日期
+        function selectDate(dateKey, btnElement) {
+            // 移除舊的 active
+            document.querySelectorAll('.calendar-day.active').forEach(el => el.classList.remove('active'));
+            btnElement.classList.add('active');
+            
+            currentSelectedDate = dateKey;
+            calendarEditor.classList.remove('hidden');
+            
+            // 更新編輯器標題
+            const [y, m, d] = dateKey.split('-');
+            editorDateTitle.textContent = `${y}年 ${m}月 ${d}日`;
+
+            // 讀取並填入資料
+            let savedData = {};
+            if (PROFESSOR_DATA[dateKey]) {
+                savedData = PROFESSOR_DATA[dateKey];
+            } else {
+                savedData = JSON.parse(localStorage.getItem(`study_record_${dateKey}`) || '{}');
+            }
+            
+            editorCheck.checked = savedData.studied || false;
+            editorNote.value = savedData.note || '';
+        }
+
+        // 儲存資料 (只存到 LocalStorage，供作者編輯用)
+        function saveData() {
+            if (!currentSelectedDate) return;
+            
+            const data = {
+                studied: editorCheck.checked,
+                note: editorNote.value
+            };
+            
+            localStorage.setItem(`study_record_${currentSelectedDate}`, JSON.stringify(data));
+            
+            // 更新 UI 狀態
+            const btn = document.querySelector(`.calendar-day[data-date="${currentSelectedDate}"]`);
+            if (btn) {
+                if (data.studied) btn.classList.add('studied');
+                else btn.classList.remove('studied');
+                
+                if (data.note) btn.classList.add('has-note');
+                else btn.classList.remove('has-note');
+            }
+
+            // 顯示儲存提示
+            saveStatus.classList.remove('opacity-0');
+            setTimeout(() => saveStatus.classList.add('opacity-0'), 1500);
+        }
+
+        editorCheck.addEventListener('change', saveData);
+        editorNote.addEventListener('input', saveData);
+
+        // --- 匯出功能 ---
+        function getAllLocalStorageData() {
+            const exportData = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('study_record_')) {
+                    const dateKey = key.replace('study_record_', '');
+                    exportData[dateKey] = JSON.parse(localStorage.getItem(key));
+                }
+            }
+            return exportData;
+        }
+
+        function exportData() {
+            const data = getAllLocalStorageData();
+            const jsonString = JSON.stringify(data, null, 2);
+            const exportCode = `const PROFESSOR_DATA = ${jsonString};`;
+            
+            document.getElementById('export-textarea').value = exportCode;
+            document.getElementById('export-modal').classList.remove('hidden');
+        }
+
+        function copyExportCode() {
+            const textarea = document.getElementById('export-textarea');
+            textarea.select();
+            document.execCommand('copy');
+            alert('已複製代碼！請貼到 index.html 指定位置。');
+        }
+
     </script>
+                    
 </body>
 </html>
